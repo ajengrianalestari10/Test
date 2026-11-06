@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Portofolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#070709;--panel:#0f0f14;--line:#24242c;--red:#ff2d3f;--ink:#f2f2f4;--mute:#9a9aa6;--blue:#2aa7ff}
+*{box-sizing:border-box;margin:0}
+html{scroll-behavior:smooth;scroll-padding-top:70px}
+body{background:radial-gradient(ellipse at 50% 0,#1a0a10 0,var(--bg) 55%) fixed;color:var(--ink);font:400 16px/1.65 "Space Grotesk",system-ui,sans-serif}
+a{color:inherit;text-decoration:none}
+.wrap{max-width:1120px;margin:0 auto;padding:0 24px}
+section{padding:96px 0}
+h2{font-size:clamp(2rem,5vw,3.2rem);line-height:1.1;letter-spacing:-.02em;margin-bottom:14px}
+.tag{display:inline-block;color:var(--red);border:1px solid var(--red);padding:2px 10px;font-size:.78rem;margin-bottom:14px}
+.lead{color:var(--mute);max-width:60ch}
+
+/* loader */
+#loader{position:fixed;inset:0;background:var(--bg);display:grid;place-items:center;z-index:99;transition:opacity .6s}
+#loader.done{opacity:0;pointer-events:none}
+#loader .lg{width:58px;height:58px;border-radius:14px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);display:grid;place-items:center;font-weight:700;color:#8c8c98;letter-spacing:.04em}
+#fx{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:100}
+
+/* nav */
+nav{position:sticky;top:0;z-index:50;background:rgba(7,7,9,.82);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+nav .wrap{display:flex;align-items:center;justify-content:space-between;height:60px}
+.logo{display:flex;align-items:center;gap:10px;font-weight:700}
+.logo b{min-width:30px;height:30px;padding:0 6px;background:var(--red);color:#fff;display:grid;place-items:center;font-size:.8rem;border-radius:4px}
+nav ul{display:flex;gap:26px;list-style:none;color:var(--mute);font-size:.92rem}
+nav ul a:hover{color:var(--ink)}
+@media(max-width:640px){nav ul{gap:14px;font-size:.8rem}}
+
+/* hero */
+.hero{padding:56px 0 96px}
+.big{font-size:clamp(3.4rem,17vw,14.5rem);font-weight:700;line-height:.9;letter-spacing:-.04em;color:transparent;-webkit-text-stroke:2px var(--red);text-transform:uppercase;margin-bottom:36px;white-space:nowrap;overflow:hidden}
+.hero-grid{display:grid;grid-template-columns:1.25fr 1fr;gap:56px;align-items:center}
+@media(max-width:820px){.hero-grid{grid-template-columns:1fr}}
+.hello{font-size:1.5rem;font-style:italic;color:var(--mute)}
+.name{display:inline-block;background:var(--red);color:#fff;font-size:clamp(2.2rem,6vw,3.6rem);font-weight:700;line-height:1;padding:8px 16px;margin:6px 0 20px}
+.role{display:inline-block;border:1px solid var(--blue);color:var(--blue);padding:3px 12px;font-size:.85rem;margin-bottom:18px}
+.btns{display:flex;gap:12px;margin:26px 0 34px;flex-wrap:wrap}
+.btn{padding:12px 22px;border:1px solid var(--red);font-weight:500;transition:.2s}
+.btn.solid{background:var(--red);color:#fff}
+.btn:hover{background:#fff;color:#000;border-color:#fff}
+.stats{display:flex;gap:34px;flex-wrap:wrap;border-top:1px solid var(--line);padding-top:22px}
+.stats strong{display:block;font-size:1.9rem;color:var(--red);line-height:1.1}
+.stats span{color:var(--mute);font-size:.85rem}
+
+/* foto */
+.photo-box{position:relative;justify-self:center;width:min(100%,380px)}
+.photo-box::before{content:"";position:absolute;inset:18px -18px -18px 18px;border:2px solid var(--blue);z-index:0}
+.photo{position:relative;z-index:1;aspect-ratio:4/5;background:var(--red);cursor:pointer;overflow:hidden;display:grid;place-items:center}
+.photo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:grayscale(1) contrast(1.15);mix-blend-mode:multiply}
+.photo .ph{position:relative;text-align:center;color:#fff;padding:20px}
+.photo .ph svg{width:96px;opacity:.9}
+.photo .ph p{font-weight:700;margin-top:8px}
+.photo .ph small{opacity:.85}
+.photo.has-img .ph{display:none}
+.photo-cap{position:absolute;left:0;right:0;bottom:0;z-index:2;background:rgba(0,0,0,.65);color:#fff;font-size:.78rem;text-align:center;padding:6px;opacity:0;transition:.2s}
+.photo:hover .photo-cap,.editing .photo-cap{opacity:1}
+
+/* about */
+.about{display:grid;grid-template-columns:1.4fr 1fr;gap:48px}
+@media(max-width:820px){.about{grid-template-columns:1fr}}
+.about p+p{margin-top:14px}
+blockquote{border-left:3px solid var(--red);background:var(--panel);padding:16px 20px;margin:22px 0;color:#fff}
+.side{display:grid;gap:14px;align-content:start}
+.side div{background:var(--panel);border:1px solid var(--line);padding:16px 18px}
+.side b{display:block;color:var(--red)}
+
+/* proyek unggulan */
+.flag{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--red);padding:30px;margin-top:28px}
+.flag h3{font-size:1.6rem;margin-bottom:8px}
+.flag .nums{display:flex;gap:36px;margin:20px 0;flex-wrap:wrap}
+.flag .nums strong{font-size:1.7rem;color:var(--red);display:block;line-height:1.1}
+.flag .nums span{color:var(--mute);font-size:.82rem}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.chips span{border:1px solid var(--line);padding:2px 10px;font-size:.8rem;color:var(--mute)}
+
+/* matriks */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:18px;margin-top:28px}
+.card{position:relative;background:var(--panel);border:1px solid var(--line);padding:22px;transition:border-color .2s}
+.card:hover{border-color:var(--red)}
+.card h3{font-size:1.1rem;margin:6px 0}
+.card p{color:var(--mute);font-size:.92rem}
+.card .tag{font-size:.7rem;margin:0}
+.del{display:none;position:absolute;top:8px;right:8px;background:var(--red);color:#fff;border:0;width:24px;height:24px;cursor:pointer;font:inherit;line-height:1}
+.editing .del{display:block}
+.add{display:none;margin-top:16px;background:transparent;color:var(--blue);border:1px dashed var(--blue);padding:10px 18px;cursor:pointer;font:inherit}
+.editing .add{display:inline-block}
+
+/* kontak */
+.cta{text-align:center;border-top:1px solid var(--line)}
+.cta h2{font-size:clamp(2rem,6vw,4rem)}
+.cta .lead{margin:0 auto}
+.cta .btns{justify-content:center}
+footer{text-align:center;color:var(--mute);font-size:.82rem;padding:28px 0 90px;border-top:1px solid var(--line)}
+
+/* toolbar edit */
+#bar{position:fixed;right:16px;bottom:16px;z-index:80;display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+#bar button{font:500 .85rem "Space Grotesk",sans-serif;background:#000;color:#fff;border:1px solid var(--blue);padding:10px 16px;cursor:pointer}
+#bar button.on{background:var(--blue);color:#001}
+.editing [contenteditable]{outline:1px dashed rgba(42,167,255,.7);outline-offset:3px;cursor:text}
+.editing [contenteditable]:focus{outline:2px solid var(--blue)}
+:focus-visible{outline:2px solid var(--blue);outline-offset:3px}
+@media(prefers-reduced-motion:reduce){#loader i{animation:none}html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+
+<div id="loader" aria-hidden="true"><div class="lg" data-ini>NM</div></div>
+<canvas id="fx" aria-hidden="true"></canvas>
+
+<div id="root">
+<nav>
+  <div class="wrap">
+    <a class="logo" href="#home"><b data-edit>NM</b><span data-edit>Namamu.</span></a>
+    <ul>
+      <li><a href="#home">Beranda</a></li>
+      <li><a href="#tentang">Tentang</a></li>
+      <li><a href="#unggulan">Proyek</a></li>
+      <li><a href="#matriks">Keahlian</a></li>
+      <li><a href="#kontak">Kontak</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="hero" id="home">
+  <div class="wrap">
+    <h1 class="big">Portofolio</h1>
+    <div class="hero-grid">
+      <div>
+        <p class="hello" data-edit>Halo, saya</p>
+        <h2 class="name" data-edit>NAMAMU.</h2><br>
+        <span class="role" data-edit>Jabatan / Profesi Kamu</span>
+        <p class="lead" data-edit>Tulis ringkasan singkat tentang dirimu di sini: bidang yang kamu tekuni, jenis masalah yang suka kamu selesaikan, dan hasil yang ingin kamu hadirkan untuk klien atau perusahaan.</p>
+        <div class="btns">
+          <a class="btn solid" href="#unggulan" data-edit>Lihat proyek</a>
+          <a class="btn" href="#kontak" data-edit>Hubungi saya</a>
+        </div>
+        <div class="stats">
+          <div><strong data-edit>5+</strong><span data-edit>Tahun pengalaman</span></div>
+          <div><strong data-edit>30+</strong><span data-edit>Proyek selesai</span></div>
+          <div><strong data-edit>12</strong><span data-edit>Sertifikasi</span></div>
+        </div>
+      </div>
+
+      <!-- ====== FOTO: klik kotak merah ini untuk upload fotomu ====== -->
+      <div class="photo-box">
+        <div class="photo" id="foto" role="button" tabindex="0" aria-label="Upload foto profil">
+          <div class="ph">
+            <svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8z"/></svg>
+            <p>FOTO KAMU DI SINI</p>
+            <small>Klik untuk upload</small>
+          </div>
+          <span class="photo-cap">Klik untuk ganti foto</span>
+        </div>
+      </div>
+      <!-- ====== AKHIR AREA FOTO ====== -->
+    </div>
+  </div>
+</header>
+
+<section id="tentang">
+  <div class="wrap about">
+    <div>
+      <span class="tag" data-edit>Latar belakang</span>
+      <h2 data-edit>Latar Belakang &amp; Filosofi</h2>
+      <p data-edit>Ceritakan perjalananmu: pendidikan, tempat kamu mulai berkarier, dan titik yang membuatmu menekuni bidang ini. Tulis dengan gaya bicaramu sendiri agar pembaca merasa mengenalmu.</p>
+      <p data-edit>Paragraf kedua cocok untuk menjelaskan cara kerjamu, nilai yang kamu pegang, dan apa yang membedakanmu dari orang lain di bidang yang sama.</p>
+      <blockquote data-edit>Tulis prinsip kerja atau kutipan favoritmu di sini.</blockquote>
+    </div>
+    <div class="side">
+      <div><b data-edit>Pendidikan</b><span data-edit>Jurusan, Universitas</span></div>
+      <div><b data-edit>Fokus utama</b><span data-edit>Bidang keahlian utamamu</span></div>
+      <div><b data-edit>Lokasi</b><span data-edit>Kota, Negara</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="unggulan">
+  <div class="wrap">
+    <span class="tag" data-edit>Proyek utama</span>
+    <h2 data-edit>Proyek Unggulan</h2>
+    <p class="lead" data-edit>Proyek yang paling kamu banggakan, lengkap dengan angka hasilnya.</p>
+
+    <article class="flag">
+      <h3 data-edit>Nama Proyek Unggulan Pertama</h3>
+      <p class="lead" data-edit>Jelaskan masalah yang kamu hadapi, peranmu, dan solusi yang kamu bangun dalam dua sampai tiga kalimat.</p>
+      <div class="nums">
+        <div><strong data-edit>40%</strong><span data-edit>Penghematan biaya</span></div>
+        <div><strong data-edit>12</strong><span data-edit>Anggota tim</span></div>
+        <div><strong data-edit>6 bln</strong><span data-edit>Durasi proyek</span></div>
+      </div>
+      <div class="chips"><span data-edit>Teknologi A</span><span data-edit>Metode B</span><span data-edit>Alat C</span></div>
+    </article>
+
+    <article class="flag">
+      <h3 data-edit>Nama Proyek Unggulan Kedua</h3>
+      <p class="lead" data-edit>Ringkas proyek kedua dengan struktur yang sama: masalah, peran, dan hasil.</p>
+      <div class="nums">
+        <div><strong data-edit>99%</strong><span data-edit>Ketepatan jadwal</span></div>
+        <div><strong data-edit>3</strong><span data-edit>Lokasi</span></div>
+      </div>
+      <div class="chips"><span data-edit>Teknologi D</span><span data-edit>Metode E</span></div>
+    </article>
+  </div>
+</section>
+
+<section id="matriks">
+  <div class="wrap">
+    <span class="tag" data-edit>Keahlian</span>
+    <h2 data-edit>Matriks Keahlian</h2>
+    <p class="lead" data-edit>Kumpulan keahlian dan proyek pendukung. Di mode edit, kamu bisa menambah atau menghapus kartu.</p>
+    <div class="grid" id="grid">
+      <div class="card"><button class="del" title="Hapus kartu">×</button><span class="tag" data-edit>Kategori</span><h3 data-edit>Keahlian atau Proyek 1</h3><p data-edit>Deskripsi singkat satu atau dua kalimat.</p></div>
+      <div class="card"><button class="del" title="Hapus kartu">×</button><span class="tag" data-edit>Kategori</span><h3 data-edit>Keahlian atau Proyek 2</h3><p data-edit>Deskripsi singkat satu atau dua kalimat.</p></div>
+      <div class="card"><button class="del" title="Hapus kartu">×</button><span class="tag" data-edit>Kategori</span><h3 data-edit>Keahlian atau Proyek 3</h3><p data-edit>Deskripsi singkat satu atau dua kalimat.</p></div>
+      <div class="card"><button class="del" title="Hapus kartu">×</button><span class="tag" data-edit>Kategori</span><h3 data-edit>Keahlian atau Proyek 4</h3><p data-edit>Deskripsi singkat satu atau dua kalimat.</p></div>
+    </div>
+    <button class="add" id="add">+ Tambah kartu</button>
+  </div>
+</section>
+
+<section class="cta" id="kontak">
+  <div class="wrap">
+    <h2 data-edit>Mari Bangun Sesuatu yang Luar Biasa.</h2>
+    <p class="lead" data-edit>Terbuka untuk kolaborasi, proyek baru, dan peluang kerja. Kirim pesan dan aku balas secepatnya.</p>
+    <div class="btns">
+      <a class="btn solid" href="mailto:email@kamu.com" data-edit>email@kamu.com</a>
+      <a class="btn" href="#" data-edit>LinkedIn</a>
+      <a class="btn" href="#" data-edit>GitHub</a>
+    </div>
+  </div>
+</section>
+
+<footer><span data-edit>© 2026 Namamu. Semua hak dilindungi.</span></footer>
+</div>
+
+<input type="file" id="file" accept="image/*" hidden>
+
+<div id="bar">
+  <button id="bEdit">Mode edit</button>
+  <button id="bDl">Unduh HTML</button>
+  <button id="bReset">Reset</button>
+</div>
+
+<script>
+(function(){
+  var KEY="portofolio-v1", root=document.getElementById("root"), body=document.body;
+
+  // muat hasil edit sebelumnya
+  try{var s=localStorage.getItem(KEY); if(s) root.innerHTML=s;}catch(e){}
+
+  function save(){try{localStorage.setItem(KEY,root.innerHTML);}catch(e){}}
+  function setEdit(on){
+    body.classList.toggle("editing",on);
+    document.getElementById("bEdit").classList.toggle("on",on);
+    document.getElementById("bEdit").textContent=on?"Selesai edit":"Mode edit";
+    root.querySelectorAll("[data-edit]").forEach(function(el){
+      if(on) el.setAttribute("contenteditable","true"); else el.removeAttribute("contenteditable");
+    });
+    if(!on) save();
+  }
+
+  // cegah link berpindah halaman saat mengedit teks
+  root.addEventListener("click",function(e){
+    var a=e.target.closest("a");
+    if(a && body.classList.contains("editing")) e.preventDefault();
+    var d=e.target.closest(".del");
+    if(d){d.closest(".card").remove();save();return;}
+    if(e.target.closest("#foto")) document.getElementById("file").click();
+  });
+  root.addEventListener("keydown",function(e){
+    if((e.key==="Enter"||e.key===" ")&&e.target.id==="foto"){e.preventDefault();document.getElementById("file").click();}
+  });
+  root.addEventListener("input",save);
+
+  // upload foto (diperkecil agar file tetap ringan)
+  document.getElementById("file").addEventListener("change",function(e){
+    var f=e.target.files[0]; if(!f) return;
+    var r=new FileReader();
+    r.onload=function(){
+      var im=new Image();
+      im.onload=function(){
+        var max=900,sc=Math.min(1,max/Math.max(im.width,im.height)),c=document.createElement("canvas");
+        c.width=im.width*sc; c.height=im.height*sc;
+        c.getContext("2d").drawImage(im,0,0,c.width,c.height);
+        var box=document.getElementById("foto"), old=box.querySelector("img");
+        if(old) old.remove();
+        var n=document.createElement("img"); n.alt="Foto profil"; n.src=c.toDataURL("image/jpeg",.88);
+        box.insertBefore(n,box.firstChild); box.classList.add("has-img"); save();
+      };
+      im.src=r.result;
+    };
+    r.readAsDataURL(f); e.target.value="";
+  });
+
+  // tambah kartu
+  document.getElementById("add").addEventListener("click",function(){
+    var g=document.getElementById("grid"), c=g.lastElementChild.cloneNode(true);
+    c.querySelector("h3").textContent="Keahlian atau Proyek Baru";
+    c.querySelector("p").textContent="Deskripsi singkat.";
+    g.appendChild(c); save();
+  });
+
+  document.getElementById("bEdit").onclick=function(){setEdit(!body.classList.contains("editing"));};
+  document.getElementById("bReset").onclick=function(){
+    if(confirm("Hapus semua hasil edit dan kembali ke template awal?")){try{localStorage.removeItem(KEY);}catch(e){} location.reload();}
+  };
+  document.getElementById("bDl").onclick=function(){
+    var was=body.classList.contains("editing"); setEdit(false);
+    var ld=document.getElementById("loader").className;
+    var html="<!DOCTYPE html>\n"+document.documentElement.outerHTML;
+    var a=document.createElement("a");
+    a.href=URL.createObjectURL(new Blob([html],{type:"text/html"}));
+    a.download="portofolio-saya.html"; a.click();
+    if(was) setEdit(true);
+  };
+
+  window.addEventListener("load",function(){setTimeout(function(){window.fxLoading=false;document.getElementById("loader").classList.add("done");},2600);});
+})();
+</script>
+<script>
+/* ===== Kawanan panah partikel: berputar di logo saat loading, lalu mengikuti kursor ===== */
+(function(){
+  if(matchMedia("(prefers-reduced-motion: reduce)").matches){window.fxLoading=false;return;}
+  window.fxLoading=true;
+  var cv=document.getElementById("fx"),ctx=cv.getContext("2d"),W,H,dpr=Math.min(devicePixelRatio||1,2);
+  function rs(){W=innerWidth;H=innerHeight;cv.width=W*dpr;cv.height=H*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);}
+  rs();addEventListener("resize",rs);
+  var m={x:W/2,y:H/2,on:false};
+  addEventListener("pointermove",function(e){m.x=e.clientX;m.y=e.clientY;m.on=true;});
+  var N=26,P=[],i;
+  var hues=[265,330,25,150,185,50]; // ungu, pink, oranye, hijau, cyan, kuning
+  for(i=0;i<N;i++){
+    var a=Math.random()*6.283;
+    P.push({x:W/2+Math.cos(a)*220,y:H/2+Math.sin(a)*220,vx:0,vy:0,
+      h:hues[i%hues.length]+Math.random()*14-7,
+      r:34+Math.random()*96,a:a,w:(Math.random()<.5?-1:1)*(.012+Math.random()*.03),
+      s:4.5+Math.random()*3.5,k:.006+Math.random()*.012,tr:[]});
+  }
+  function arrow(x,y,ang,s){
+    ctx.save();ctx.translate(x,y);ctx.rotate(ang);
+    ctx.beginPath();ctx.moveTo(s,0);ctx.lineTo(-s*.75,s*.7);ctx.lineTo(-s*.3,0);ctx.lineTo(-s*.75,-s*.7);ctx.closePath();
+    ctx.fill();ctx.restore();
+  }
+  var t=0;
+  function loop(){
+    t+=1;ctx.clearRect(0,0,W,H);
+    var cx,cy,k;
+    if(window.fxLoading){cx=W/2;cy=H/2;k=.9;}
+    else if(m.on){cx=m.x;cy=m.y;k=1;}
+    else{cx=W/2+Math.cos(t*.006)*W*.3;cy=H/2+Math.sin(t*.009)*H*.25;k=1.4;}
+    ctx.globalCompositeOperation="lighter";
+    for(i=0;i<N;i++){
+      var p=P[i];
+      p.a+=p.w;
+      var wob=1+Math.sin(t*.02+i)*.18;
+      var gx=cx+Math.cos(p.a)*p.r*k*wob, gy=cy+Math.sin(p.a)*p.r*.8*k*wob;
+      p.vx+=(gx-p.x)*p.k*2.2;p.vy+=(gy-p.y)*p.k*2.2;
+      p.vx*=.9;p.vy*=.9;
+      p.x+=p.vx;p.y+=p.vy;
+      var ang=Math.atan2(p.vy,p.vx);
+      p.tr.unshift([p.x,p.y,ang]);if(p.tr.length>9)p.tr.pop();
+      for(var j=p.tr.length-1;j>=1;j--){
+        ctx.fillStyle="hsla("+p.h+",85%,70%,"+(.22*(1-j/p.tr.length))+")";
+        arrow(p.tr[j][0],p.tr[j][1],p.tr[j][2],p.s*(1-j*.05));
+      }
+      ctx.shadowColor="hsl("+p.h+",90%,65%)";ctx.shadowBlur=10;
+      ctx.fillStyle="hsl("+p.h+",90%,74%)";
+      arrow(p.x,p.y,ang,p.s);
+      ctx.shadowBlur=0;
+    }
+    ctx.globalCompositeOperation="source-over";
+    requestAnimationFrame(loop);
+  }
+  loop();
+})();
+</script>
+</body>
+</html>
